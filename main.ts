@@ -1,5 +1,15 @@
 import { cliffy, fs, path } from "./deps.ts";
 
+function convertFileName(fileName: string): string {
+  const fileNameWithoutExtension = fileName.slice(0, -3);
+  const convertedFileNameWithoutExtension = fileNameWithoutExtension.replaceAll(
+    ".",
+    "/"
+  );
+  const convertedFileName = convertedFileNameWithoutExtension + ".md";
+  return convertedFileName;
+}
+
 await new cliffy.Command()
   .name("d2folders")
   .version("0.1.0")
@@ -14,15 +24,17 @@ await new cliffy.Command()
         continue;
       }
 
-      const fileNameWithoutExtension = file.name.slice(-3);
-      const newBaseName = fileNameWithoutExtension.replaceAll(".", "/");
-      const newFileName = newBaseName + ".md";
+      /**
+       * - Handle daily journal notes
+       */
+
+      const newFileName = convertFileName(file.name);
       const newFileNameDirName = path.dirname(newFileName);
       const newDirPath = path.join(dendronPath, newFileNameDirName);
       const newFilePath = path.join(dendronPath, newFileName);
 
       if (options.debug) {
-        console.log(`${file.path} -> ${newFileName} in ${newDirPath}`);
+        console.log(`${file.path} -> ${newFilePath} in ${newDirPath}`);
       }
 
       if (options.dryRun) {
