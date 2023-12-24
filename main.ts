@@ -2,6 +2,14 @@ import { cliffy, fs, path } from "./deps.ts";
 
 function convertFileName(fileName: string): string {
   const fileNameWithoutExtension = fileName.slice(0, -3);
+
+  if (fileNameWithoutExtension.startsWith("daily.journal.")) {
+    const year = fileNameWithoutExtension.slice(14, 18);
+    const date = fileNameWithoutExtension.slice(14);
+    const convertedDate = date.replaceAll(".", "-");
+    return `daily/journal/${year}/${convertedDate}.md`;
+  }
+
   const convertedFileNameWithoutExtension = fileNameWithoutExtension.replaceAll(
     ".",
     "/"
@@ -24,17 +32,18 @@ await new cliffy.Command()
         continue;
       }
 
-      /**
-       * - Handle daily journal notes
-       */
-
       const newFileName = convertFileName(file.name);
       const newFileNameDirName = path.dirname(newFileName);
       const newDirPath = path.join(dendronPath, newFileNameDirName);
       const newFilePath = path.join(dendronPath, newFileName);
 
       if (options.debug) {
-        console.log(`${file.path} -> ${newFilePath} in ${newDirPath}`);
+        console.log(
+          `${path.join(
+            dendronPath,
+            file.name
+          )} -> ${newFilePath} in ${newDirPath}`
+        );
       }
 
       if (options.dryRun) {
