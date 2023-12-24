@@ -14,8 +14,8 @@ await new cliffy.Command()
         continue;
       }
 
-      const baseName = path.basename(file.name, ".md");
-      const newBaseName = baseName.replaceAll(".", "/");
+      const fileNameWithoutExtension = file.name.slice(-3);
+      const newBaseName = fileNameWithoutExtension.replaceAll(".", "/");
       const newFileName = newBaseName + ".md";
       const newFileNameDirName = path.dirname(newFileName);
       const newDirPath = path.join(dendronPath, newFileNameDirName);
