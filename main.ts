@@ -3,6 +3,10 @@ import { cliffy, fs, path } from "./deps.ts";
 function convertFileName(fileName: string): string {
   const fileNameWithoutExtension = fileName.slice(0, -3);
 
+  if (fileNameWithoutExtension.endsWith(".contact")) {
+    return `${fileNameWithoutExtension.slice(0, -8)}.md`;
+  }
+
   if (fileNameWithoutExtension.startsWith("daily.journal.")) {
     const year = fileNameWithoutExtension.slice(14, 18);
     const date = fileNameWithoutExtension.slice(14);
